@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - Asistente Virtual IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="modern-auth">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <div class="logo-icon">🤖</div>
+                    <h1>Asistente Virtual IA</h1>
+                </div>
+                <h2>Crear Cuenta</h2>
+                <p>Únete para guardar tus conversaciones y acceder desde cualquier dispositivo</p>
+            </div>
+            
+            <form id="registerForm" action="{{ url_for('main.register') }}" method="POST" novalidate>
+                <div class="form-group">
+                    <label for="username">Nombre de usuario</label>
+                    <input type="text" id="username" name="username" class="form-input" required>
+                    <div class="error-message" id="usernameError">El nombre de usuario es requerido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                    <div class="error-message" id="emailError">Por favor, ingresa un email válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Teléfono (opcional)</label>
+                    <input type="tel" id="phone" name="phone" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                    <div class="error-message" id="passwordError">La contraseña debe tener al menos 8 caracteres</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar contraseña</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required>
+                    <div class="error-message" id="confirmPasswordError">Las contraseñas no coinciden</div>
+                </div>
+
+                <button type="submit" class="btn btn-gradient">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="m22 21-3-3m0 0a5.5 5.5 0 1 0-7.8-7.8 5.5 5.5 0 0 0 7.8 7.8Z"/>
+                    </svg>
+                    Crear cuenta
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>¿Ya tienes cuenta? <a href="{{ url_for('main.login') }}" class="auth-link">Iniciar sesión</a></p>
+                <p><a href="{{ url_for('main.home') }}" class="back-link">← Volver al inicio</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            const usernameError = document.getElementById('usernameError');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            
+            // Reset errors
+            [username, email, password, confirmPassword].forEach(input => {
+                input.classList.remove('error');
+            });
+            [usernameError, emailError, passwordError, confirmPasswordError].forEach(error => {
+                error.classList.remove('show');
+            });
+            
+            let isValid = true;
+            
+            // Username validation
+            if (!username.value.trim()) {
+                username.classList.add('error');
+                usernameError.classList.add('show');
+                isValid = false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
+                email.classList.add('error');
+                emailError.classList.add('show');
+                isValid = false;
+            }
+            
+            // Password validation (minimum 8 characters)
+            if (!password.value || password.value.length < 8) {
+                password.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+            
+            // Confirm password validation
+            if (!confirmPassword.value || password.value !== confirmPassword.value) {
+                confirmPassword.classList.add('error');
+                confirmPasswordError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                this.submit();
+            }
+        });
+        
+        // Real-time validation
+        document.getElementById('username').addEventListener('input', function() {
+            const usernameError = document.getElementById('usernameError');
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                usernameError.classList.remove('show');
+            }
+        });
+        
+        document.getElementById('email').addEventListener('input', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailError = document.getElementById('emailError');
+            
+            if (this.value.trim() && emailRegex.test(this.value.trim())) {
+                this.classList.remove('error');
+                emailError.classList.remove('show');
+            }
+        });
+        
+        document.getElementById('password').addEventListener('input', function() {
+            const passwordError = document.getElementById('passwordError');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            
+            if (this.value.length >= 8) {
+                this.classList.remove('error');
+                passwordError.classList.remove('show');
+            }
+            
+            // Check confirm password if it has value
+            if (confirmPassword.value && this.value === confirmPassword.value) {
+                confirmPassword.classList.remove('error');
+                confirmPasswordError.classList.remove('show');
+            } else if (confirmPassword.value) {
+                confirmPassword.classList.add('error');
+                confirmPasswordError.classList.add('show');
+            }
+        });
+        
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            
+            if (this.value && password.value === this.value) {
+                this.classList.remove('error');
+                confirmPasswordError.classList.remove('show');
+            }
+        });
+    </script>
+    
+</body>
+</html>

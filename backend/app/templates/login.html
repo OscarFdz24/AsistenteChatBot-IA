@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Asistente Virtual IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+    <div class="modern-auth">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <div class="logo-icon">🤖</div>
+                    <h1>Asistente Virtual IA</h1>
+                </div>
+                <h2>Iniciar Sesión</h2>
+                <p>Accede a tu cuenta para continuar tus conversaciones</p>
+            </div>
+            
+            <form id="loginForm" action="{{ url_for('main.login') }}" method="POST" novalidate>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                    <div class="error-message" id="emailError">Por favor, ingresa un email válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                    <div class="error-message" id="passwordError">La contraseña es requerida</div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Recordarme por 7 días</label>
+                </div>
+
+                <button type="submit" class="btn btn-gradient">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    Iniciar sesión
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>¿No tienes cuenta? <a href="{{ url_for('main.register') }}" class="auth-link">Crear cuenta</a></p>
+                <p><a href="{{ url_for('main.home') }}" class="back-link">← Volver al inicio</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Reset errors
+            email.classList.remove('error');
+            password.classList.remove('error');
+            emailError.classList.remove('show');
+            passwordError.classList.remove('show');
+            
+            let isValid = true;
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
+                email.classList.add('error');
+                emailError.classList.add('show');
+                isValid = false;
+            }
+            
+            // Password validation
+            if (!password.value.trim()) {
+                password.classList.add('error');
+                passwordError.classList.add('show');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                this.submit();
+            }
+        });
+        
+        // Real-time validation
+        document.getElementById('email').addEventListener('input', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailError = document.getElementById('emailError');
+            
+            if (this.value.trim() && emailRegex.test(this.value.trim())) {
+                this.classList.remove('error');
+                emailError.classList.remove('show');
+            }
+        });
+        
+        document.getElementById('password').addEventListener('input', function() {
+            const passwordError = document.getElementById('passwordError');
+            
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                passwordError.classList.remove('show');
+            }
+        });
+    </script>
+    
+</body>
+</html>

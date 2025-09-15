@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Invitado - Asistente Virtual IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest.css') }}">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="mobile-header-left">
+            <button class="hamburger-menu" onclick="toggleSidebar()">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </button>
+            <h1 class="mobile-title">VirtualGPT - Invitado</h1>
+        </div>
+    </div>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <div class="app-sidebar">
+            <div class="sidebar-header">
+                <div class="app-title">
+                    <div class="app-icon">🤖</div>
+                    <h2>VirtualGPT</h2>
+                </div>
+                <div class="guest-info">
+                    <div class="guest-avatar">👤</div>
+                    <div class="guest-details">
+                        <div class="guest-label">Modo Invitado</div>
+                        <div class="guest-status">Sin guardar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guest-message">
+                <div class="message-icon">💾</div>
+                <h3>¿Quieres guardar tus conversaciones?</h3>
+                <p>Para que tus mensajes y conversaciones se guarden permanentemente, necesitas crear una cuenta o iniciar sesión.</p>
+                
+                <div class="auth-actions">
+                    <a href="{{ url_for('main.register') }}" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="m22 21-3-3m0 0a5.5 5.5 0 1 0-7.8-7.8 5.5 5.5 0 0 0 7.8 7.8Z"/>
+                        </svg>
+                        Crear cuenta
+                    </a>
+                    <a href="{{ url_for('main.login') }}" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M21 12H9"/>
+                        </svg>
+                        Iniciar sesión
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="guest-notice">
+                    <small>🔒 Esta conversación no se guardará</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="app-main">
+            <div class="chat-header">
+                <h1 id="chat-title">VirtualGPT - Invitado</h1>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="welcome-container">
+                    <div class="welcome-icon">💬</div>
+                    <h2>¿Cómo puedo ayudarte hoy?</h2>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Envía un mensaje..."
+                        rows="1"
+                        onkeydown="handleKeyDown(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button type="submit" class="send-btn" id="send-btn" onclick="sendMessage(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/guest-chat.js') }}"></script>
+    
+    <style>
+        .guest-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+        
+        .guest-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .guest-details {
+            flex: 1;
+        }
+        
+        .guest-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff6b35;
+        }
+        
+        .guest-status {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .guest-message {
+            padding: 20px 16px;
+            margin: 0 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .message-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+        
+        .guest-message h3 {
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ececf1;
+        }
+        
+        .guest-message p {
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #a1a1aa;
+        }
+        
+        .auth-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ececf1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+        
+        .guest-notice {
+            text-align: center;
+            color: #a1a1aa;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
+            }
+            
+            .app-sidebar {
+                position: fixed;
+                top: 0;
+                left: -280px;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .app-sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .app-main {
+                margin: 0;
+                width: 100%;
+            }
+            
+            .chat-header {
+                display: none;
+            }
+        }
+    </style>
+</body>
+</html>

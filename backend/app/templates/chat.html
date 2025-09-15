@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Asistente Virtual IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="mobile-header-left">
+            <button class="hamburger-menu" onclick="toggleSidebar()">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </button>
+            <h1 class="mobile-title">VirtualGPT</h1>
+        </div>
+    </div>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <div class="app-sidebar">
+            <div class="sidebar-header">
+                <div class="app-title">
+                    <div class="app-icon">🤖</div>
+                    <h2>VirtualGPT</h2>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">{{ user.username[0].upper() }}</div>
+                    <div class="user-details">
+                        <div class="username">{{ user.username }}</div>
+                        <div class="user-email">{{ user.email }}</div>
+                    </div>
+                </div>
+                <button class="new-chat-btn" onclick="createNewChat()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    Nueva conversación
+                </button>
+            </div>
+
+            <div class="conversations-list">
+                <h3>Conversaciones</h3>
+                {% for conversation in conversations %}
+                <div class="conversation-item" data-id="{{ conversation.id }}" onclick="loadConversation({{ conversation.id }})">
+                    <div class="conversation-content">
+                        <div class="conversation-title">{{ conversation.title }}</div>
+                    </div>
+                    <div class="conversation-actions">
+                        <button class="action-btn" onclick="event.stopPropagation(); editConversation({{ conversation.id }}, &quot;{{ conversation.title }}&quot;)" title="Editar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn" onclick="event.stopPropagation(); deleteConversation({{ conversation.id }})" title="Eliminar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()" title="Cerrar sesión">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="app-main">
+            <div class="chat-header">
+                <h1 id="chat-title"> VirtualGPT</h1>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="welcome-container">
+                    <div class="welcome-icon">💬</div>
+                    <h2>¿Cómo puedo ayudarte hoy?</h2>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="message-input" 
+                        placeholder="Envía un mensaje..."
+                        rows="1"
+                        onkeydown="handleKeyDown(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button type="button" class="send-btn" id="send-btn" onclick="sendMessage(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

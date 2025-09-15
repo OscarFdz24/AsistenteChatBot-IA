@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente Virtual IA - Tu compañero inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <div class="modern-landing">
+        <div class="landing-hero">
+            <div class="hero-content">
+                <div class="app-logo">
+                    <div class="logo-icon">🤖</div>
+                    <h1>Asistente Virtual IA</h1>
+                </div>
+                <p class="hero-description">Experimenta conversaciones inteligentes con nuestro asistente virtual potenciado por IA. Obtén respuestas instantáneas, ayuda personalizada y una experiencia de chat fluida.</p>
+                
+                <div class="auth-buttons">
+                    <a href="{{ url_for('main.register') }}" class="btn btn-gradient">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="m22 21-3-3m0 0a5.5 5.5 0 1 0-7.8-7.8 5.5 5.5 0 0 0 7.8 7.8Z"/>
+                        </svg>
+                        Crear cuenta
+                    </a>
+                    <a href="{{ url_for('main.login') }}" class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M21 12H9"/>
+                        </svg>
+                        Iniciar sesión
+                    </a>
+                </div>
+                
+                <div class="guest-section">
+                    <p>¿Solo quieres probar?</p>
+                    <a href="{{ url_for('main.guest_chat') }}" class="guest-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Chatear como invitado
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
